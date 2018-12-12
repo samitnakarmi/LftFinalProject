@@ -16,33 +16,36 @@ document.onkeydown = function(e) {
     // console.log('right is pressed');
     hero.left = hero.left + 10;
     moveHero();
-  } else if (e.keyCode === 38) {
-    hero.top = hero.top - 10;
-    moveHero();
-  } else if (e.keyCode === 40) {
-    hero.top = hero.top + 10;
-    moveHero();
-  } else if (e.keyCode === 32) {
-    // console.log('spaceBar');
-    // document.getElementById('missile').style.display = 'block';
-    // fire();
+  }
+  // else if (e.keyCode === 38) {
+  //   hero.top = hero.top - 10;
+  //   moveHero();
+  // } else if (e.keyCode === 40) {
+  //   hero.top = hero.top + 10;
+  //   moveHero();
+  // }
+  else if (e.keyCode === 32) {
+    console.log('FIRE');
 
     missiles.push({
       left: hero.left + 15,
       top: hero.top,
     });
-    console.log(missiles);
+    drawMissiles();
   }
 };
 
 function moveHero() {
   document.getElementById('hero').style.left = hero.left + 'px';
-  document.getElementById('hero').style.top = hero.top + 'px';
+  // document.getElementById('hero').style.top = hero.top + 'px';
 }
 
-function fire() {
-  // for (i = hero.top, i < 800; i++)
-  // {
-  //   missl.style.display = "";
-  //   }
+function drawMissiles() {
+  document.getElementById('missiles').innerHTML = '';
+  for (var missile = 0; missile < missiles.length; missile++) {
+    // alert('yes');
+    document.getElementById('missiles').innerHTML +=
+      `<div class = 'missile' style = 'left:${missiles[missile].left}px;
+       top:${missiles[missile].top}px;'></div>`;
+  }
 }
