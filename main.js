@@ -24,6 +24,7 @@ var enemies = [
 ];
 
 var snd = new Audio('assets/gameSounds/shoot.wav');
+var snd2 = new Audio('assets/gameSounds/explosion.wav');
 
 document.onkeydown = function(e) {
   console.log(e);
@@ -43,10 +44,8 @@ document.onkeydown = function(e) {
     hero.top = hero.top + 10;
     moveHero();
   } else if (e.keyCode === 32) {
-    console.log('FIRE');
-
+    // console.log('FIRE');
     snd.play();
-
     missiles.push({
       left: hero.left + 15,
       top: hero.top,
@@ -63,7 +62,6 @@ function moveHero() {
 function drawMissiles() {
   document.getElementById('missiles').innerHTML = '';
   for (var missile = 0; missile < missiles.length; missile++) {
-    // alert('yes');
     document.getElementById(
       'missiles',
     ).innerHTML += `<div class = 'missile' style = 'left:${
@@ -89,10 +87,37 @@ function drawEnemies() {
   }
 }
 
+function moveEnemies() {
+  for (var enemy = 0; enemy < enemies.length; enemy++) {
+    enemies[enemy].top = enemies[enemy].top + 3;
+  }
+}
+
+function collisionDetection() {
+  // alert('hi');
+  for (var enemy = 0; enemy < enemies.length; enemy++) {
+    for (var missile = 0; missile < missiles.length; missile++) {
+      if (
+        missiles[missile].top <= enemies[enemy].top + 50 &&
+        missiles[missile].top > enemies[enemy].top &&
+        missiles[missile].left <= enemies[enemy].left + 50 &&
+        missiles[missile].left >= enemies[enemy].left
+      ) {
+        // console.log('HIT!');
+        enemies.splice(enemy, 1);
+        snd2.play();
+        missiles.splice(missile, 1);
+      }
+    }
+  }
+}
+
 function gameLoop() {
-  setTimeout(gameLoop, 100);
+  setTimeout(gameLoop, 50);
   moveMissiles();
   drawMissiles();
+  moveEnemies();
   drawEnemies();
+  collisionDetection();
 }
 gameLoop();
