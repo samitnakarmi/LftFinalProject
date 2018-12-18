@@ -1,7 +1,7 @@
 #background {
   background-image: url('assets/background.jpg');
   height: 800px;
-  width: 1200px;
+  width: 100%;
   background-size: cover;
 }
 
@@ -38,4 +38,33 @@
   height: 800px;
   width: 1200px;
   position: absolute;
+}
+
+dialog {
+  width: 150px;
+  height: 150px;
+  /* background-color: blue; */
+  opacity: 0.6;
+  font-size: 50px;
+  color: red;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -75px; /* half width*/
+  margin-top: -75px; /* half height*/
+}
+
+.buttonPlayAgain {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  
 }
