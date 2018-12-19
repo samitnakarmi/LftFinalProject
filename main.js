@@ -1,188 +1,208 @@
-var snd = new Audio('assets/gameSounds/shoot.wav');
-var snd2 = new Audio('assets/gameSounds/explosion.wav');
-var heroHasDied = false;
-var MAX_HEIGHT = 800;
-var MAX_WIDTH = document.getElementById('background').offsetWidth;
+class Game {
+  constructor() {
+    this.heroHasDied = false;
+    this.snd = new Audio('assets/gameSounds/shoot.wav');
+    this.snd2 = new Audio('assets/gameSounds/explosion.wav');
+    this.heroHasDied = false;
+    this.MAX_HEIGHT = 800;
+    this.MAX_WIDTH = document.getElementById('background').offsetWidth;
+    this.ref = null;
+    this.enemyCount = 0;
 
-//-------------Keys Pressed----------------
-document.onkeydown = function(e) {
-  if (!heroHasDied) {
-    if (e.keyCode === 37 && hero.left >= 50) {
-      hero.left = hero.left - 10;
-      hero.moveHero();
-    } else if (e.keyCode === 39 && hero.left <= MAX_WIDTH - 50) {
-      hero.left = hero.left + 10;
-      hero.moveHero();
-    } else if (e.keyCode === 38 && hero.top >= 50) {
-      hero.top = hero.top - 10;
-      hero.moveHero();
-    } else if (e.keyCode === 40 && hero.top <= MAX_HEIGHT - 50) {
-      hero.top = hero.top + 10;
-      hero.moveHero();
-    } else if (e.keyCode === 32) {
-      snd.play();
-      missiles.push({
-        left: hero.left + 15,
-        top: hero.top,
-      });
-      drawMissiles();
+    this.enemies = [];
+    // this.enemies = [
+    //   new Enemy(200, 100),
+    //   { left: 300, top: 100 },
+    //   { left: 400, top: 100 },
+    //   { left: 500, top: 100 },
+    //   { left: 600, top: 100 },
+    //   { left: 700, top: 100 },
+    //   { left: 800, top: 100 },
+    //   { left: 900, top: 100 },
+    //   { left: 200, top: 175 },
+    //   { left: 300, top: 175 },
+    //   { left: 400, top: 175 },
+    //   { left: 500, top: 175 },
+    //   { left: 600, top: 175 },
+    //   { left: 700, top: 175 },
+    //   { left: 800, top: 175 },
+    //   { left: 900, top: 175 },
+    // ];
+    for (var left = 200; left <= 1000; left = left + 100) {
+      this.enemies.push(new Enemy(left, 100));
+      this.enemies.push(new Enemy(left, 175));
+      this.enemyCount = this.enemyCount + 2;
+    }
+
+    this.hero = new Hero(700, 550);
+
+    var heroElement = document.getElementById('hero');
+    heroElement.style.left = '550px';
+    heroElement.style.top = '700px';
+    this.missiles = [];
+
+    //-------------Keys Pressed----------------
+    document.onkeydown = (e) => {
+      if (!this.heroHasDied) {
+        if (e.keyCode === 37 && this.hero.left >= 50) {
+          this.hero.left = this.hero.left - 10;
+          this.hero.moveHero();
+        } else if (e.keyCode === 39 && this.hero.left <= this.MAX_WIDTH - 50) {
+          this.hero.left = this.hero.left + 10;
+          this.hero.moveHero();
+        } else if (e.keyCode === 38 && this.hero.top >= 50) {
+          this.hero.top = this.hero.top - 10;
+          this.hero.moveHero();
+        } else if (e.keyCode === 40 && this.hero.top <= this.MAX_HEIGHT - 50) {
+          this.hero.top = this.hero.top + 10;
+          this.hero.moveHero();
+        } else if (e.keyCode === 32) {
+          this.snd.play();
+          this.missiles.push({
+            left: this.hero.left + 15,
+            top: this.hero.top,
+          });
+          // drawMissiles();
+          // enemyMissiles();
+          // enemyDrawMissiles();
+          // enemyMoveMissiles();
+        }
+      }
+    };
+  }
+
+  drawEnemies() {
+    console.log(document);
+    document.getElementById('enemies').innerHTML = '';
+    for (var enemy = 0; enemy < this.enemies.length; enemy++) {
+      document.getElementById('enemies').innerHTML += `<div class = 'enemy' style = 'left:${this.enemies[enemy].left}px;
+				top:${this.enemies[enemy].top}px;'></div>`;
     }
   }
-};
 
-//-------------Keys Pressed end----------------
-
-//----------------------hero stuffs begin------------------->
-
-function Hero(top, left) {
-  this.top = top;
-  this.left = left;
-}
-
-Hero.prototype.moveHero = function() {
-  document.getElementById('hero').style.left = hero.left + 'px';
-  document.getElementById('hero').style.top = hero.top + 'px';
-};
-
-var hero;
-//----------------------hero stuffs end------------------->
-
-//----------------------enemies stuffs begin------------------->
-
-var enemies;
-
-function initializer() {
-  enemies = [
-    { left: 200, top: 100 },
-    { left: 300, top: 100 },
-    { left: 400, top: 100 },
-    { left: 500, top: 100 },
-    { left: 600, top: 100 },
-    { left: 700, top: 100 },
-    { left: 800, top: 100 },
-    { left: 900, top: 100 },
-    { left: 200, top: 175 },
-    { left: 300, top: 175 },
-    { left: 400, top: 175 },
-    { left: 500, top: 175 },
-    { left: 600, top: 175 },
-    { left: 700, top: 175 },
-    { left: 800, top: 175 },
-    { left: 900, top: 175 },
-  ];
-
-  hero = new Hero(700, 550);
-
-  var heroElement = document.getElementById('hero');
-  heroElement.style.left = '550px';
-  heroElement.style.top = '700px';
-  missiles = [];
-}
-
-function drawEnemies() {
-  document.getElementById('enemies').innerHTML = '';
-  for (var enemy = 0; enemy < enemies.length; enemy++) {
-    document.getElementById(
-      'enemies',
-    ).innerHTML += `<div class = 'enemy' style = 'left:${enemies[enemy].left}px;
-       top:${enemies[enemy].top}px;'></div>`;
+  moveEnemies() {
+    for (var enemy = 0; enemy < this.enemies.length; enemy++) {
+      this.enemies[enemy].top = this.enemies[enemy].top + 1;
+    }
   }
-}
 
-function moveEnemies() {
-  for (var enemy = 0; enemy < enemies.length; enemy++) {
-    enemies[enemy].top = enemies[enemy].top + 1;
+  drawMissiles() {
+    document.getElementById('missiles').innerHTML = '';
+    for (var missile = 0; missile < this.missiles.length; missile++) {
+      document.getElementById('missiles').innerHTML += `<div class = 'missile' style = 'left:${this.missiles[missile].left}px;
+				top:${this.missiles[missile].top}px;'></div>`;
+    }
   }
-}
-//----------------------enemies stuffs end------------------->
 
-//----------------------missiles stuffs begin------------------->
-
-var missiles;
-
-function drawMissiles() {
-  document.getElementById('missiles').innerHTML = '';
-  for (var missile = 0; missile < missiles.length; missile++) {
-    document.getElementById(
-      'missiles',
-    ).innerHTML += `<div class = 'missile' style = 'left:${
-      missiles[missile].left
-    }px;
-       top:${missiles[missile].top}px;'></div>`;
+  moveMissiles() {
+    for (var missile = 0; missile < this.missiles.length; missile++) {
+      this.missiles[missile].top = this.missiles[missile].top - 15;
+    }
   }
-}
 
-function moveMissiles() {
-  for (var missile = 0; missile < missiles.length; missile++) {
-    missiles[missile].top = missiles[missile].top - 7;
-  }
-}
-
-//----------------------missiles stuffs end------------------->
-
-function collisionDetection() {
-  // alert('hi');
-  for (var enemy = 0; enemy < enemies.length; enemy++) {
-    for (var missile = 0; missile < missiles.length; missile++) {
-      if (
-        missiles[missile].top <= enemies[enemy].top + 50 &&
-        missiles[missile].top >= enemies[enemy].top &&
-        missiles[missile].left <= enemies[enemy].left + 50 &&
-        missiles[missile].left >= enemies[enemy].left
-      ) {
-        // console.log('HIT!');
-        enemies.splice(enemy, 1);
-        snd2.play();
-        missiles.splice(missile, 1);
+  collisionDetection() {
+    for (var enemy = 0; enemy < this.enemies.length; enemy++) {
+      for (var missile = 0; missile < this.missiles.length; missile++) {
+        if (
+          this.missiles[missile].top <= this.enemies[enemy].top + 50 &&
+          this.missiles[missile].top >= this.enemies[enemy].top &&
+          this.missiles[missile].left <= this.enemies[enemy].left + 50 &&
+          this.missiles[missile].left >= this.enemies[enemy].left
+        ) {
+          // console.log('HIT!');
+          this.enemies.splice(enemy, 1);
+          this.snd2.play();
+          this.missiles.splice(missile, 1);
+        }
       }
     }
   }
-}
 
-function heroCollision() {
-  for (var x = 0; x < enemies.length; x++) {
-    if (
-      hero.top <= enemies[x].top + 50 &&
-      hero.top >= enemies[x].top &&
-      hero.left <= enemies[x].left + 50 &&
-      hero.left >= enemies[x].left
-    ) {
-      heroHasDied = true;
-      // console.log('heroHit');
+  heroCollision() {
+    for (var x = 0; x < this.enemies.length; x++) {
+      if (
+        this.hero.top <= this.enemies[x].top + 50 &&
+        this.hero.top >= this.enemies[x].top &&
+        this.hero.left <= this.enemies[x].left + 50 &&
+        this.hero.left >= this.enemies[x].left
+      ) {
+        this.heroHasDied = true;
+        // console.log('heroHit');
 
-      // document.getElementById('hero').style.backgroundImage =
-
-      // document.getElementById('hero').style.backgroundImage = "url('./assets/ heroDie.jpg'
-      // )"
-
-      var body = document.getElementById('hero');
-      body.style.backgroundImage = "url('assets/heroDie.jpg')";
-      clearTimeout(ref);
-
-      var x = document.getElementById('myDialog');
-      x.show();
+        var body = document.getElementById('hero');
+        body.style.backgroundImage = "url('assets/heroDie.jpg')";
+        clearInterval(this.ref);
+        var x = document.getElementById('myDialog');
+        x.show();
+      }
     }
+  }
+
+  enemyMissileLauncher() {
+    var max = this.enemyCount;
+    var min = 0;
+    var random = Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  play() {
+    console.log('play function');
+    this.moveMissiles();
+    this.drawMissiles();
+    this.moveEnemies();
+    this.drawEnemies();
+    // enemyDrawMissiles();
+    // enemyMoveMissiles();
+
+    this.collisionDetection();
+    this.heroCollision();
+    if (this.enemies.length === 0) {
+      for (var left = 200; left <= 1000; left = left + 100) {
+        this.enemies.push(new Enemy(left, 100));
+        this.enemies.push(new Enemy(left, 175));
+        this.enemyCount = this.enemyCount + 2;
+      }
+    }
+  }
+
+  gameloop() {
+    var self = this;
+    this.ref = setInterval(() => {
+      self.play();
+    }, 100);
   }
 }
 
-var ref;
+class Hero {
+  constructor(top, left) {
+    this.top = top;
+    this.left = left;
+  }
 
-function gameLoop() {
-  ref = setTimeout(gameLoop, 100);
-  moveMissiles();
-  drawMissiles();
-  moveEnemies();
-  drawEnemies();
-  collisionDetection();
-  heroCollision();
+  moveHero() {
+    document.getElementById('hero').style.left = this.left + 'px';
+    document.getElementById('hero').style.top = this.top + 'px';
+  }
 }
 
-initializer();
-gameLoop();
+class Enemy {
+  constructor(left, top) {
+    this.left = left;
+    this.top = top;
+  }
+}
+
+var game;
+
+function gameLoop() {
+  game = new Game();
+  game.gameloop();
+  // setInterval(() => {
+  //   game.play();
+  // }, 100);
+}
 
 function replay() {
   console.log('replay called');
-  heroHasDied = false;
 
   var x = document.getElementById('myDialog');
   x.close();
@@ -190,7 +210,7 @@ function replay() {
   var body = document.getElementById('hero');
   body.style.backgroundImage = "url('assets/hero.png')";
 
-  
-  initializer();
   gameLoop();
 }
+
+gameLoop();

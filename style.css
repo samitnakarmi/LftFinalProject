@@ -27,6 +27,25 @@
   position: absolute;
 }
 
+
+
+
+/* #missilesEnemies {
+  height: 800px;
+  width: 1200px;
+  position: absolute;
+}
+
+.missileEnemy {
+  background-image: url('assets/missile2.png');
+  height: 20px;
+  width: 10px;
+  position: absolute;
+} */
+
+
+
+
 .enemy {
   background-image: url(assets/enemy.png);
   height: 50px;
@@ -66,5 +85,5 @@ dialog {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-  
+
 }
