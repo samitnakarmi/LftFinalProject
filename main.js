@@ -171,11 +171,11 @@ class Game {
     }
   }
 
-  enemyMissileLauncher() {
-    var max = this.enemyCount;
-    var min = 0;
-    var random = Math.floor(Math.random() * (max - min)) + min;
-  }
+  // enemyMissileLauncher() {
+  //   var max = this.enemyCount;
+  //   var min = 0;
+  //   var random = Math.floor(Math.random() * (max - min)) + min;
+  // }
 
   play() {
     // console.log('play function');
@@ -283,3 +283,7 @@ function start(level) {
 
   gameLoop(difficulty);
 }
+
+
+
+
