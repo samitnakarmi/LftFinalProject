@@ -29,6 +29,13 @@
   position: absolute;
 }
 
+.enemyMissiles{
+background-image: url('assets/missile2.png');
+  height: 20px;
+  width: 10px;
+  position: absolute;
+}
+
 /* #missilesEnemies {
   height: 800px;
   width: 1200px;
