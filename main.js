@@ -1,4 +1,5 @@
 var difficulty;
+var winCheck = 1;
 
 class Game {
   constructor(difficulty) {
@@ -15,6 +16,7 @@ class Game {
     this.direction = false;
     this.missiles = [];
     this.enemyMissiles = [];
+    winCheck = 1;
 
     for (var left = 200; left <= 1000; left = left + 100) {
       this.enemies.push(new Enemy(left, 100));
@@ -270,15 +272,12 @@ class Game {
     this.collisionDetection();
     this.heroCollision();
 
-    if (this.enemies.length === 0) {
-      alert('You win');
-      // var y = document.getElementById('winDialog');
-      // y.show();
-      // for (var left = 200; left <= 1000; left = left + 100) {
-      //   this.enemies.push(new Enemy(left, 100));
-      //   this.enemies.push(new Enemy(left, 175));
-      //   this.enemyCount = this.enemyCount + 2;
-      // }
+    if (this.enemies.length === 0 && winCheck === 1) {
+      winCheck++;
+      clearInterval(this.ref);
+
+      var y = document.getElementById('winDialog');
+      y.show();
     }
   }
 
@@ -349,8 +348,8 @@ function replay() {
   var x = document.getElementById('myDialog');
   x.close();
 
-  // var y = document.getElementById('winDialog');
-  // y.close();
+  var y = document.getElementById('winDialog');
+  y.close();
 
   var body = document.getElementById('hero');
   body.style.backgroundImage = "url('assets/airplane.png')";
