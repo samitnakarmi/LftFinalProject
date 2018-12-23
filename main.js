@@ -5,6 +5,7 @@ class Game {
     this.heroHasDied = false;
     this.snd = new Audio('assets/gameSounds/shoot.wav');
     this.snd2 = new Audio('assets/gameSounds/explosion.wav');
+    this.snd3 = new Audio('assets/gameSounds/heroDead.wav');
     this.MAX_HEIGHT = 800;
     this.MAX_WIDTH = document.getElementById('background').offsetWidth;
     this.ref = null;
@@ -181,6 +182,7 @@ class Game {
     for (var x = 0; x < this.enemyMissiles.length; x++) {
       if (this.enemyMissiles[x].top >= this.hero.top && this.enemyMissiles[x].top <= this.hero.top + 33) {
         if (this.enemyMissiles[x].left >= this.hero.left && this.enemyMissiles[x].left <= this.hero.left + 53) {
+          this.snd3.play();
           this.heroHasDied = true;
           this.gameOver();
         }
@@ -240,6 +242,7 @@ class Game {
         this.hero.left <= this.enemies[x].left + 50 &&
         this.hero.left >= this.enemies[x].left
       ) {
+        this.snd3.play();
         this.heroHasDied = true;
         this.gameOver();
         // console.log('heroHit');
